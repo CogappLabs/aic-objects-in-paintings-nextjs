@@ -1,3 +1,8 @@
+## Environment variables
+
+1. Duplicate .env.example and name it '.env.local'
+2. Add values for `ES_INDEX`, `ES_NODE` and `ES_API_KEY`
+
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
 ## Getting Started
