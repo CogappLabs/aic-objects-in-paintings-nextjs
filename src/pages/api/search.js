@@ -1,4 +1,4 @@
-import search from "../lib/esSearch";
+import search from "../../lib/esSearch";
 
 const handler = async (req, res) => {
   let { q } = req.query;

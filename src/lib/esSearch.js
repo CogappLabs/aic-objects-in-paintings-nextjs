@@ -4,7 +4,8 @@ const search = async (query) => {
   const esClient = new ElasticsearchClient({
     node: process.env.ES_NODE,
     auth: {
-      apiKey: process.env.ES_API_KEY,
+      username: process.env.ES_USERNAME,
+      password: process.env.ES_PASSWORD
     },
   });
   const [esResults] = await Promise.all([searchElasticsearch(esClient, query)]);
@@ -34,5 +35,13 @@ const transformElasticsearchResults = (results) => {
     };
   });
 };
+
+async function getDocumentById(id) {
+  const { body } = await client.get({
+    index: process.env.ES_INDEX,
+    id: id
+  });
+  return body;
+}
 
 export default search;
