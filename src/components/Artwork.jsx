@@ -8,8 +8,8 @@ const Artwork = ({ artwork }) => {
         <div className="aspect-square w-60 h-60 flex items-center justify-center bg-gray-200">
           <img src={thumbnailUrl} alt="" className="max-h-full hover:opacity-80 transition-opacity duration-150" />
         </div>
-        <h3 className="font-medium text-lg underline mt-2">{artwork.title}</h3>
-        <p className="italic">{artwork.artist}</p>
+        <h3 className="font-medium text-lg underline mt-2 w-60">{artwork.title}</h3>
+        <p className="italic w-60">{artwork.artist}</p>
       </a>
       {!!artwork.chosenTag && (
         <div className="flex flex-col items-center p-4">

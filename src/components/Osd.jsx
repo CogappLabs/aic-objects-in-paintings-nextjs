@@ -42,9 +42,9 @@ export default function Osd({
           subPixelRoundingForTransparency,
           sequenceMode: true,
           showSequenceControl: false,
-          showHomeControl: false,
-          showZoomControl: false,
-          showFullPageControl: false,
+          showHomeControl: true,
+          showZoomControl: true,
+          showFullPageControl: true,
           visibilityRatio: 0.3,
           tileSources: [ `${iiifUrl}/info.json` ],
           gestureSettingsMouse: {
