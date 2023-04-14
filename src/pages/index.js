@@ -29,63 +29,63 @@ export default function Home() {
         "Rectangle",
         "Carmine",
       ],
-      chosenTag: "Bed",
-    },
-    {
-      id: 28560,
-      title: "The Bedroom",
-      artist: "Vincent van Gogh",
-      url: "https://www.artic.edu/artworks/28560",
-      iiif: "https://www.artic.edu/iiif/2/e966799b-97ee-1cc6-bd2f-a94b4b8bb8f9",
-      tags: [
-        "Azure",
-        "Water",
-        "Aqua",
-        "Electric blue",
-        "Pattern",
-        "Font",
-        "Rectangle",
-        "Carmine",
-      ],
       chosenTag: null,
     },
-    {
-      id: 11723,
-      title: "Woman at Her Toilette",
-      artist: "Berthe Morisot",
-      url: "https://www.artic.edu/artworks/11723",
-      iiif: "https://www.artic.edu/iiif/2/78c80988-6524-cec7-c661-a4c0a706d06f",
-      tags: [
-        "Brown",
-        "Wood",
-        "Temple",
-        "Font",
-        "Artifact",
-        "Wall",
-        "Brick",
-        "Rectangle",
-        "Pattern",
-        "Relief",
-        "Sculpture",
-        "Ancient history",
-        "Stone wall",
-        "Rock",
-        "Illustration",
-        "Creative arts",
-        "History",
-        "Carving",
-        "Metal",
-        "Stone carving",
-        "Drawing",
-        "Painting",
-        "Trunk",
-        "Still life photography",
-        "Brickwork",
-        "Handwriting",
-        "Archaeological site",
-        "Still life",
-      ],
-    },
+    // {
+    //   id: 28560,
+    //   title: "The Bedroom",
+    //   artist: "Vincent van Gogh",
+    //   url: "https://www.artic.edu/artworks/28560",
+    //   iiif: "https://www.artic.edu/iiif/2/e966799b-97ee-1cc6-bd2f-a94b4b8bb8f9",
+    //   tags: [
+    //     "Azure",
+    //     "Water",
+    //     "Aqua",
+    //     "Electric blue",
+    //     "Pattern",
+    //     "Font",
+    //     "Rectangle",
+    //     "Carmine",
+    //   ],
+    //   chosenTag: null,
+    // },
+    // {
+    //   id: 11723,
+    //   title: "Woman at Her Toilette",
+    //   artist: "Berthe Morisot",
+    //   url: "https://www.artic.edu/artworks/11723",
+    //   iiif: "https://www.artic.edu/iiif/2/78c80988-6524-cec7-c661-a4c0a706d06f",
+    //   tags: [
+    //     "Brown",
+    //     "Wood",
+    //     "Temple",
+    //     "Font",
+    //     "Artifact",
+    //     "Wall",
+    //     "Brick",
+    //     "Rectangle",
+    //     "Pattern",
+    //     "Relief",
+    //     "Sculpture",
+    //     "Ancient history",
+    //     "Stone wall",
+    //     "Rock",
+    //     "Illustration",
+    //     "Creative arts",
+    //     "History",
+    //     "Carving",
+    //     "Metal",
+    //     "Stone carving",
+    //     "Drawing",
+    //     "Painting",
+    //     "Trunk",
+    //     "Still life photography",
+    //     "Brickwork",
+    //     "Handwriting",
+    //     "Archaeological site",
+    //     "Still life",
+    //   ],
+    // },
   ]);
 
   const fetchArtworkForTag = (tag) => {
@@ -95,7 +95,9 @@ export default function Home() {
     };
 
     getRandomArtworkForTag().then((data) => {
-      alert(data.message);
+      // alert(data.message);
+      const chosenArtwork = data[Math.floor(Math.random()*data.length)];
+
       // const newArtwork = data.artwork;
       // Update the chosenTag
       const lastArtworkIndex = artworks.length - 1;
@@ -104,14 +106,13 @@ export default function Home() {
       const updatedArtworks = [
         ...artworks.slice(0, lastArtworkIndex),
         updatedLastArtwork,
-        // newArtwork,
+        chosenArtwork.source,
       ];
       setArtworks(updatedArtworks);
     });
   };
 
   const removeLastArtwork = () => {
-    const lastArtworkIndex = artworks.length - 1;
     setArtworks(artworks.slice(0, -1));
   }
 
