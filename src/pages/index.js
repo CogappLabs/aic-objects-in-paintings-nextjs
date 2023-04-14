@@ -7,22 +7,30 @@ const inter = Inter({ subsets: ["latin"] });
 
 import TagsList from "../components/TagsList";
 import Tag from "../components/Tag";
+import Artwork from "@/components/Artwork";
 
 const Viewer = dynamic(() => import("../components/Viewer"), { ssr: false });
 
 export default function Home() {
-  // const [tags, setTags] = useState([
-  //   "Azure",
-  //   "Water",
-  //   "Aqua",
-  //   "Electric blue",
-  //   "Pattern",
-  //   "Font",
-  //   "Rectangle",
-  //   "Carmine",
-  // ]);
-
-  const [journey, setJourney] = useState([
+  const [artworks, setArtworks] = useState([
+    {
+      "id" : 28561,
+      "title" : "The Bedroom",
+      "artist" : "Vincent van Gogh",
+      "url" : "https://www.artic.edu/artworks/28560",
+      "iiif" : "https://www.artic.edu/iiif/2/25c31d8d-21a4-9ea1-1d73-6a2eca4dda7e",
+      "tags" : [
+        "Azure",
+        "Water",
+        "Aqua",
+        "Electric blue",
+        "Pattern",
+        "Font",
+        "Rectangle",
+        "Carmine"
+      ],
+      "chosenTag": "Bed",
+    },
     {
       "id" : 28560,
       "title" : "The Bedroom",
@@ -51,28 +59,31 @@ export default function Home() {
 
     getRandomArtworkForTag().then((data) => {
       alert(data.message);
+      // const newArtwork = data.artwork;
       // Update the chosenTag
-      const lastJourneyItemIndex = journeys.length - 1;
-      const lastJourneyItem = journeys[lastJourneyItemIndex];
-      const updatedLastJourneyItem = { ...lastJourneyItem, chosenTag: tag };
-      const updatedJourneys = [
-        ...journeys.slice(0, lastJourneyItemIndex),
-        updatedLastJourneyItem,
+      const lastArtworkIndex = artworks.length - 1;
+      const lastArtwork = artworks[lastArtworkIndex];
+      const updatedLastArtwork = { ...lastArtwork, chosenTag: tag };
+      const updatedArtworks = [
+        ...artworks.slice(0, lastArtworkIndex),
+        updatedLastArtwork,
+        // newArtwork,
       ];
-      setJourneys(updatedJourneys);
+      setArtworks(updatedArtworks);
     });
   };
 
-  const currentArtwork = journey.at(-1);
+  const currentArtwork = artworks.at(-1);
+  const pastArtworks = artworks.slice(0, -1);
 
   return (
-    <main className="h-screen grid grid-cols-3 gap-4 container mx-auto px-4">
+    <main className="h-screen grid grid-cols-3 gap-4 container mx-auto p-4">
       <div className="col-span-2">
         <div className="aspect-[16/9]">
-        <Viewer
-          elementId="viewer"
-          iiifUrl={currentArtwork.iiif}
-        />
+          <Viewer
+            elementId="viewer"
+            iiifUrl={currentArtwork.iiif}
+          />
         </div>
 
         <h2 className="font-bold text-2xl mt-4">
@@ -92,6 +103,11 @@ export default function Home() {
       </div>
       <div className="col-span-3">
         <h2 className="font-bold text-2xl">Your journey</h2>
+        <ul className="flex">
+          {artworks.map((artwork) => (
+            <Artwork key={artwork.id} artwork={artwork} />
+          ))}
+        </ul>
       </div>
     </main>
   );
