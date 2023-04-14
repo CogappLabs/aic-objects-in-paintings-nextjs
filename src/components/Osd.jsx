@@ -46,7 +46,7 @@ export default function Osd({
           showZoomControl: false,
           showFullPageControl: false,
           visibilityRatio: 0.3,
-          tileSources: [ iiifUrl ],
+          tileSources: [ `${iiifUrl}/info.json` ],
           gestureSettingsMouse: {
             scrollToZoom: false,
           },
