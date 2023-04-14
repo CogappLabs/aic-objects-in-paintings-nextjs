@@ -85,25 +85,21 @@ export default function Home() {
         [tag]: data.length,
       });
 
-      while (!artworkIsUnique) {
-        console.log(
-          artworkIds,
-          parseInt(chosenArtwork.id, 10),
-          typeof artworkIds[0],
-          typeof parseInt(chosenArtwork.id, 10)
-        );
-        if (!artworkIds.includes(parseInt(chosenArtwork.id, 10))) {
-          artworkIsUnique = true;
+      if (data.length > 1) {
+        while (!artworkIsUnique) {
+          if (!artworkIds.includes(parseInt(chosenArtwork.id, 10))) {
+            artworkIsUnique = true;
 
-          setChosenTagTotals({
-            ...chosenTagsTotals,
-            [tag]: chosenTagsTotals[tag] ? chosenTagsTotals[tag] + 1 : 1,
-          });
+            setChosenTagTotals({
+              ...chosenTagsTotals,
+              [tag]: chosenTagsTotals[tag] ? chosenTagsTotals[tag] + 1 : 1,
+            });
 
-          break;
+            break;
+          }
+
+          chosenArtwork = data[Math.floor(Math.random() * data.length)];
         }
-
-        chosenArtwork = data[Math.floor(Math.random() * data.length)];
       }
 
       // Update the chosen artwork
