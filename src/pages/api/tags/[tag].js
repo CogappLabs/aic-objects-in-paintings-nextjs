@@ -1,12 +1,18 @@
+import getDocumentsByTag from "../../../lib/esSearch";
 
-// Get a random artwork for a tag
 const handler = async (req, res) => {
-  const { tag } = req.query;
-  const response = await fetch(`https://api.example.com/tags/${tag}`);
-  const data = await response.json();
-  res.status(200).json(data);
+  let { tag } = req.query;
 
-  // Now call the /artworks/:artworkId route to get iiif url, list of tags, name, hyperlink
+  if (tag === undefined) {
+    res.status(400).json({ error: "Missing tag name" });
+    return;
+  }
+  try {
+    const searchResults = await getDocumentsByTag(tag);
+    res.status(200).json(searchResults);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json(error);
+  }
 };
-
 export default handler;

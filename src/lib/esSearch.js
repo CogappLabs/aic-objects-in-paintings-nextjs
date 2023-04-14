@@ -44,4 +44,19 @@ async function getDocumentById(id) {
   return body;
 }
 
+async function getDocumentsByTag(tag) {
+  const { body } = await client.search({
+    index: process.env.ES_INDEX,
+    body: {
+      query: {
+        match: {
+          tags: tag
+        }
+      },
+      _source: ['id']
+    }
+  });
+  return body.hits.hits.map(hit => hit._source.id);
+}
+
 export default search;
