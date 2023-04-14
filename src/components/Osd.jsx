@@ -92,6 +92,12 @@ export default function Osd({
     }
   }, [osdInstance, isFullScreen])
 
+  useEffect(() => {
+    if (iiifUrl && osdInstance) {
+      osdInstance.open(`${iiifUrl}/info.json`);
+    }
+  }, [osdInstance, iiifUrl]);
+
   return (
     <div
       id={id}

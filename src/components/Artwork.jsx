@@ -1,12 +1,14 @@
 import PropTypes from "prop-types";
 
 const Artwork = ({ artwork }) => {
-  const thumbnailUrl = `${artwork.iiif}/full/!300,300/0/default.jpg`
+  const thumbnailUrl = `${artwork.iiif}/full/!250,250/0/default.jpg`
   return (
     <li className="flex items-center">
-      <a href={artwork.url}>
-        <img src={thumbnailUrl} alt="" />
-        <h3 className="font-medium text-lg underline">{artwork.title}</h3>
+      <a href={artwork.url} target="_blank">
+        <div className="aspect-square w-60 h-60 flex items-center justify-center bg-gray-200">
+          <img src={thumbnailUrl} alt="" className="max-h-full hover:opacity-80 transition-opacity duration-150" />
+        </div>
+        <h3 className="font-medium text-lg underline mt-2">{artwork.title}</h3>
         <p className="italic">{artwork.artist}</p>
       </a>
       {!!artwork.chosenTag && (

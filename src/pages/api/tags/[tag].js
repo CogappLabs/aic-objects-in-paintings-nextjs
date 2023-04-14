@@ -6,7 +6,7 @@ const handler = async (req, res) => {
   const data = await response.json();
   res.status(200).json(data);
 
-  // Now call the /artwork/:id route - iiif url, list of tags, name, hyperlink
+  // Now call the /artworks/:artworkId route to get iiif url, list of tags, name, hyperlink
 };
 
 export default handler;
