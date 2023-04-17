@@ -8,6 +8,14 @@ import TagsList from "../components/TagsList";
 
 const Viewer = dynamic(() => import("../components/Viewer"), { ssr: false });
 
+// get x and y from a coordinate like '(0.46498754620552063, 0.22276608645915985)'
+const getXandY = (str) => {
+  const coordinates = str.slice(1, -1).split(", ");
+  const x = parseFloat(coordinates[0]);
+  const y = parseFloat(coordinates[1]);
+  return { x, y };
+};
+
 export default function Home() {
   const [artworks, setArtworks] = useState([
     {
@@ -53,6 +61,20 @@ export default function Home() {
         "Bedding",
         "Ceiling",
         "Home accessories",
+      ],
+      objects: [
+        {
+          tag: "Table",
+          confidence: "0.8592445850372314",
+          bl: "(0.14006252586841583, 0.33594056963920593)",
+          br: "(0.3540078401565552, 0.33594056963920593)",
+          tr: "(0.3540078401565552, 0.6137327551841736)",
+          tl: "(0.14006252586841583, 0.6137327551841736)",
+          rect: [
+            0.14006252586841583, 0.3862672448158264, 0.21394531428813934,
+            0.27779218554496765,
+          ],
+        },
       ],
     },
   ]);
@@ -133,11 +155,34 @@ export default function Home() {
   // Current artwork is the last in the array
   const currentArtwork = artworks.at(-1);
 
+  const overlays =
+    "objects" in currentArtwork && currentArtwork.objects.length > 0
+      ? currentArtwork.objects.map((object) => {
+          return {
+            id: `${currentArtwork.id}-${object.tag.replace(/[^a-z0-9]/gi, "")}`,
+            tag: object.tag,
+            // rect: object.rect,
+            rect: [
+              getXandY(object.bl).x, 
+              getXandY(object.bl).y, 
+              getXandY(object.tr).x - getXandY(object.tl).x, 
+              getXandY(object.tl).y - getXandY(object.bl).y
+            ]
+          };
+        })
+      : [];
+
+  console.log(overlays);
+
   return (
     <main className="grid grid-cols-4 gap-4 container mx-auto p-4">
       <div className="col-span-3">
         <div className="aspect-[16/9]">
-          <Viewer elementId="viewer" iiifUrl={currentArtwork.iiif} />
+          <Viewer
+            elementId="viewer"
+            iiifUrl={currentArtwork.iiif}
+            overlays={overlays}
+          />
         </div>
 
         <h2 className="font-bold text-2xl mt-4">
@@ -192,6 +237,9 @@ export default function Home() {
             <Artwork key={artwork.id} artwork={artwork} />
           ))}
         </ul>
+        {/* {overlays.map((overlay) => (
+          <div key={overlay.id} id={overlay.id} className="border-yellow-300 border-4">{overlay.tag}</div>
+        ))} */}
       </div>
     </main>
   );

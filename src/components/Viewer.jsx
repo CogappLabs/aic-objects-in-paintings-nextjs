@@ -4,7 +4,7 @@ import classNames from 'classnames'
 import Osd from './Osd'
 
 
-export default function Viewer({ elementId, iiifUrl }) {
+export default function Viewer({ elementId, iiifUrl, overlays }) {
   const [osdInstance, setOsdInstance] = useState(null)
   const [isFullScreen, setIsFullScreen] = useState(false)
   const viewerRef = useRef()
@@ -102,6 +102,7 @@ export default function Viewer({ elementId, iiifUrl }) {
           setOsdInstance={setOsdInstance}
           iiifUrl={iiifUrl}
           isFullScreen={isFullScreen}
+          overlays={overlays}
         />
         {/* This element is just here to trap mouse and touch events */}
         {!isFullScreen && (
