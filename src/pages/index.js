@@ -237,9 +237,7 @@ export default function Home() {
             <Artwork key={artwork.id} artwork={artwork} />
           ))}
         </ul>
-        {/* {overlays.map((overlay) => (
-          <div key={overlay.id} id={overlay.id} className="border-yellow-300 border-4">{overlay.tag}</div>
-        ))} */}
+        <div className="hidden js-overlays-container"></div>
       </div>
     </main>
   );

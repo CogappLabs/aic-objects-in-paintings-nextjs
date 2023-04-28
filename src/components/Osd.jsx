@@ -122,6 +122,7 @@ export default function Osd({
     if (osdInstance && overlays) {
       overlays.forEach((overlay) => {
         // Create a new <div> element
+        const overlaysContainer = document.querySelector('.js-overlays-container')
         const overlayElement = document.createElement('div');
 
         // Set its ID attribute to "myDiv"
@@ -132,7 +133,7 @@ export default function Osd({
         overlayElement.className = `${overlayColors[Math.floor(Math.random() * overlayColors.length)]} border-2 hover:bg-opacity-20 p-1 leading-none shadow [text-shadow:_0_0_2px_#000] cursor-pointer`;
 
         // Add the new <div> element to the DOM
-        document.body.appendChild(overlayElement);
+        overlaysContainer.appendChild(overlayElement);
 
         // const imageAspectRatio = osdInstance.tileSources[0].aspectRatio;
 
