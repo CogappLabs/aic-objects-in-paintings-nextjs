@@ -64,6 +64,18 @@ export default function Home() {
       ],
       objects: [
         {
+          tag: "Bed",
+          confidence: "0.8861366510391235",
+          bl: "(0.46498754620552063, 0.22276608645915985)",
+          br: "(0.9359931945800781, 0.22276608645915985)",
+          tr: "(0.9359931945800781, 0.8410670757293701)",
+          tl: "(0.46498754620552063, 0.8410670757293701)",
+          rect: [
+            0.46498754620552063, 0.22276608645915985, 0.4710056483745575,
+            0.6183009892702103,
+          ],
+        },
+        {
           tag: "Table",
           confidence: "0.8592445850372314",
           bl: "(0.14006252586841583, 0.33594056963920593)",
@@ -71,8 +83,32 @@ export default function Home() {
           tr: "(0.3540078401565552, 0.6137327551841736)",
           tl: "(0.14006252586841583, 0.6137327551841736)",
           rect: [
-            0.14006252586841583, 0.3862672448158264, 0.21394531428813934,
+            0.14006252586841583, 0.33594056963920593, 0.21394531428813934,
             0.27779218554496765,
+          ],
+        },
+        {
+          tag: "Chair",
+          confidence: "0.8008004426956177",
+          bl: "(0.002156810136511922, 0.39126113057136536)",
+          br: "(0.1712246686220169, 0.39126113057136536)",
+          tr: "(0.1712246686220169, 0.8596672415733337)",
+          tl: "(0.002156810136511922, 0.8596672415733337)",
+          rect: [
+            0.002156810136511922, 0.39126113057136536, 0.16906785848550498,
+            0.4684061110019684,
+          ],
+        },
+        {
+          tag: "Chair",
+          confidence: "0.6600181460380554",
+          bl: "(0.347951740026474, 0.2974742352962494)",
+          br: "(0.47696653008461, 0.2974742352962494)",
+          tr: "(0.47696653008461, 0.5834335684776306)",
+          tl: "(0.347951740026474, 0.5834335684776306)",
+          rect: [
+            0.347951740026474, 0.2974742352962494, 0.129014790058136,
+            0.2859593331813812,
           ],
         },
       ],
@@ -161,22 +197,22 @@ export default function Home() {
           return {
             id: `${currentArtwork.id}-${object.tag.replace(/[^a-z0-9]/gi, "")}`,
             tag: object.tag,
-            // rect: object.rect,
-            rect: [
-              getXandY(object.bl).x, 
-              getXandY(object.bl).y, 
-              getXandY(object.tr).x - getXandY(object.tl).x, 
-              getXandY(object.tl).y - getXandY(object.bl).y
-            ]
+            rect: object.rect,
+            // rect: [
+            //   getXandY(object.bl).x,
+            //   getXandY(object.bl).y / aspectRatio,
+            //   getXandY(object.tr).x - getXandY(object.tl).x,
+            //   getXandY(object.tl).y / aspectRatio - getXandY(object.bl).y / aspectRatio,
+            // ],
           };
         })
       : [];
 
-  console.log(overlays);
+  console.log(currentArtwork, overlays);
 
   return (
     <main className="grid grid-cols-4 gap-4 container mx-auto p-4">
-      <div className="col-span-3">
+      <div className="col-span-full sm:col-span-3">
         <div className="aspect-[16/9]">
           <Viewer
             elementId="viewer"
@@ -192,7 +228,7 @@ export default function Home() {
         </h2>
         <p className="italic">{currentArtwork.artist}</p>
       </div>
-      <div className="col-span-1 overflow-y-scroll">
+      <div className="col-span-full sm:col-span-1 min-h-[12rem] overflow-y-scroll">
         <h2 className="font-bold text-2xl">Tags</h2>
         <TagsList>
           {currentArtwork.tags.map((tagName) => (
@@ -238,6 +274,9 @@ export default function Home() {
           ))}
         </ul>
         <div className="hidden js-overlays-container"></div>
+        {/* {overlays.map((overlay) => (
+          <div key={overlay.id} id={overlay.id} className="border-yellow-300 border-4">{overlay.tag}</div>
+        ))} */}
       </div>
     </main>
   );
