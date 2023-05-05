@@ -19,8 +19,8 @@ const overlayColors = [
   "text-purple-600 border-purple-600 hover:bg-purple-600",
   "text-fuchsia-600 border-fuchsia-600 hover:bg-fuchsia-600",
   "text-pink-600 border-pink-600 hover:bg-pink-600",
-  "text-rose-600 border-rose-600 hover:bg-rose-600"
-]
+  "text-rose-600 border-rose-600 hover:bg-rose-600",
+];
 
 export default function Osd({
   id,
@@ -70,7 +70,6 @@ export default function Osd({
           gestureSettingsMouse: {
             scrollToZoom: false,
           },
-          preserveViewport: true,
         })
       );
     }
@@ -122,15 +121,19 @@ export default function Osd({
     if (osdInstance && overlays) {
       overlays.forEach((overlay) => {
         // Create a new <div> element
-        const overlaysContainer = document.querySelector('.js-overlays-container')
-        const overlayElement = document.createElement('div');
+        const overlaysContainer = document.querySelector(
+          ".js-overlays-container"
+        );
+        const overlayElement = document.createElement("div");
 
         // Set its ID attribute to "myDiv"
         overlayElement.id = overlay.id;
 
         // Set its text content to "Hello, world!"
         overlayElement.textContent = overlay.tag;
-        overlayElement.className = `${overlayColors[Math.floor(Math.random() * overlayColors.length)]} border-2 hover:bg-opacity-20 p-1 leading-none shadow [text-shadow:_0_0_2px_#000] cursor-pointer`;
+        overlayElement.className = `${
+          overlayColors[Math.floor(Math.random() * overlayColors.length)]
+        } ${overlay.isClickable ? 'cursor-pointer' : 'cursor-not-allowed'} border-2 hover:bg-opacity-20 p-1 leading-none shadow [text-shadow:_0_0_2px_#000]`;
 
         // Add the new <div> element to the DOM
         overlaysContainer.appendChild(overlayElement);
@@ -138,22 +141,29 @@ export default function Osd({
         // const imageAspectRatio = osdInstance.tileSources[0].aspectRatio;
 
         // if (imageAspectRatio) {
-          // if width > height (landscape) then aspect ratio is > 1
-          // if square then aspect ratio is 1
-          // if width < height (portrait) then aspect ratio is < 1
+        // if width > height (landscape) then aspect ratio is > 1
+        // if square then aspect ratio is 1
+        // if width < height (portrait) then aspect ratio is < 1
         // }
 
         osdInstance.addOverlay({
           element: overlay.id,
           location: osdInstance.viewport.imageToViewportRectangle(
-            new OpenSeadragon.Rect(overlay.rect[0], overlay.rect[1], overlay.rect[2], overlay.rect[3])
+            new OpenSeadragon.Rect(
+              overlay.rect[0],
+              overlay.rect[1],
+              overlay.rect[2],
+              overlay.rect[3]
+            )
           ),
         });
 
-        var tracker = new OpenSeadragon.MouseTracker({
-          element: overlayElement,
-          clickHandler: overlay.onClick,
-       });
+        if (overlay.isClickable) {
+          const tracker = new OpenSeadragon.MouseTracker({
+            element: overlayElement,
+            clickHandler: overlay.onClick,
+          });
+        }
       });
     }
   }, [osdInstance, overlays]);

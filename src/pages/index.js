@@ -6,6 +6,8 @@ import Artwork from "../components/Artwork";
 import Tag from "../components/Tag";
 import TagsList from "../components/TagsList";
 
+import apiTagsTotals from '../data/tag-totals'
+
 const Viewer = dynamic(() => import("../components/Viewer"), { ssr: false });
 
 // get x and y from a coordinate like '(0.46498754620552063, 0.22276608645915985)'
@@ -25,6 +27,7 @@ export default function Home() {
       url: "https://www.artic.edu/artworks/28560",
       iiif: "https://www.artic.edu/iiif/2/25c31d8d-21a4-9ea1-1d73-6a2eca4dda7e",
       tags: [
+        "Bed",
         "Furniture",
         "Table",
         "Chair",
@@ -115,17 +118,45 @@ export default function Home() {
     },
   ]);
 
-  const [chosenTagsTotals, setChosenTagTotals] = useState({
-    Azure: 1,
-    Water: 1,
-    Aqua: 1,
-    "Electric blue": 1,
-    Pattern: 1,
-    Font: 1,
+  const [seenTagsTotals, setSeenTagsTotals] = useState({
+    Bed: 1,
+    Furniture: 1,
+    Table: 1,
+    Chair: 1,
+    Wood: 1,
+    Couch: 1,
+    Flooring: 1,
+    "Interior design": 1,
+    Yellow: 1,
+    Floor: 1,
     Rectangle: 1,
-    Carmine: 1,
+    "Living room": 1,
+    Hardwood: 1,
+    "Wood stain": 1,
+    Leisure: 1,
+    Comfort: 1,
+    Painting: 1,
+    Linens: 1,
+    Drawing: 1,
+    Illustration: 1,
+    "studio couch": 1,
+    "Outdoor furniture": 1,
+    Room: 1,
+    Font: 1,
+    Pattern: 1,
+    "Throw pillow": 1,
+    Drawer: 1,
+    Desk: 1,
+    "Coffee table": 1,
+    "Picture frame": 1,
+    "Dining room": 1,
+    House: 1,
+    Bedroom: 1,
+    Wallpaper: 1,
+    Bedding: 1,
+    Ceiling: 1,
+    "Home accessories": 1,
   });
-  const [apiTagsTotals, setApiTagTotals] = useState({});
 
   const fetchArtworkForTag = (tag) => {
     const getRandomArtworkForTag = async () => {
@@ -134,23 +165,29 @@ export default function Home() {
     };
 
     getRandomArtworkForTag().then((data) => {
+      // Get all chosen artwork Ids
       const artworkIds = artworks.map((artwork) => artwork.id);
       let artworkIsUnique = false;
+
+      // Choose an artwork
       let chosenArtwork = data[Math.floor(Math.random() * data.length)];
 
-      setApiTagTotals({
-        ...apiTagsTotals,
-        [tag]: data.length,
-      });
-
       if (data.length > 1) {
+        // TODO this is infinite looping
         while (!artworkIsUnique) {
           if (!artworkIds.includes(parseInt(chosenArtwork.id, 10))) {
             artworkIsUnique = true;
 
-            setChosenTagTotals({
-              ...chosenTagsTotals,
-              [tag]: chosenTagsTotals[tag] ? chosenTagsTotals[tag] + 1 : 1,
+            // Increment each of the tag totals for each tag in this object
+            const tagTotals = {}
+            // console.log('Chosen artwork:', chosenArtwork)
+            chosenArtwork.source.tags.forEach((tag) => {
+              tagTotals[tag] = seenTagsTotals[tag] ? seenTagsTotals[tag] + 1 : 1 
+            })
+
+            setSeenTagsTotals({
+              ...seenTagsTotals,
+              ...tagTotals,
             });
 
             break;
@@ -174,15 +211,23 @@ export default function Home() {
   };
 
   const removeLastArtwork = () => {
-    // reduce chosenTagsTotals for the tag by 1
+    // reduce seenTagsTotals for each tag by one
     if (
       artworks[artworks.length - 2] &&
       artworks[artworks.length - 2].chosenTag
     ) {
-      const chosenTag = artworks[artworks.length - 2].chosenTag;
-      setChosenTagTotals({
-        ...chosenTagsTotals,
-        [chosenTag]: chosenTagsTotals[chosenTag] - 1,
+      const lastArtwork = artworks[artworks.length - 1]
+
+      // Decrement each of the tag totals for each tag in this object
+      const tagTotals = {}
+
+      lastArtwork.tags.forEach((tag) => {
+        tagTotals[tag] = seenTagsTotals[tag] - 1 
+      })
+
+      setSeenTagsTotals({
+        ...seenTagsTotals,
+        ...tagTotals,
       });
     }
     setArtworks(artworks.slice(0, -1));
@@ -194,11 +239,16 @@ export default function Home() {
   const overlays =
     "objects" in currentArtwork && currentArtwork.objects.length > 0
       ? currentArtwork.objects.map((object) => {
+          const isClickable =
+            apiTagsTotals[object.tag] !== seenTagsTotals[object.tag];
           return {
             id: `${currentArtwork.id}-${object.tag.replace(/[^a-z0-9]/gi, "")}`,
             tag: object.tag,
             rect: object.rect,
-            onClick: () => fetchArtworkForTag(object.tag),
+            onClick: isClickable
+              ? () => fetchArtworkForTag(object.tag)
+              : () => {},
+            isClickable,
             // rect: [
             //   getXandY(object.bl).x,
             //   getXandY(object.bl).y / aspectRatio,
@@ -236,7 +286,7 @@ export default function Home() {
             <Tag
               key={tagName}
               onClick={() => fetchArtworkForTag(tagName)}
-              disabled={apiTagsTotals[tagName] == chosenTagsTotals[tagName]}
+              disabled={apiTagsTotals[tagName] == seenTagsTotals[tagName]}
             >
               {tagName}
             </Tag>

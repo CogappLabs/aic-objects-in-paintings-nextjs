@@ -1,9 +1,9 @@
 import PropTypes from "prop-types";
 
-const Tag = ({ children, onClick }) => {
+const Tag = ({ children, onClick, disabled }) => {
   return (
     <li className="tag">
-      <button type="button" onClick={onClick} className="bg-white p-2 shadow-sm rounded-lg hover:bg-blue-200 transition-colors duration-150 disabled:opacity-50 disabled:cursor-not-allowed">
+      <button type="button" onClick={onClick} className="bg-white p-2 shadow-sm rounded-lg hover:bg-blue-200 transition-colors duration-150 disabled:opacity-50 disabled:cursor-not-allowed" disabled={disabled}>
         {children}
       </button>
     </li>
