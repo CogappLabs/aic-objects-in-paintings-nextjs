@@ -149,6 +149,11 @@ export default function Osd({
             new OpenSeadragon.Rect(overlay.rect[0], overlay.rect[1], overlay.rect[2], overlay.rect[3])
           ),
         });
+
+        var tracker = new OpenSeadragon.MouseTracker({
+          element: overlayElement,
+          clickHandler: overlay.onClick,
+       });
       });
     }
   }, [osdInstance, overlays]);

@@ -198,6 +198,7 @@ export default function Home() {
             id: `${currentArtwork.id}-${object.tag.replace(/[^a-z0-9]/gi, "")}`,
             tag: object.tag,
             rect: object.rect,
+            onClick: () => fetchArtworkForTag(object.tag),
             // rect: [
             //   getXandY(object.bl).x,
             //   getXandY(object.bl).y / aspectRatio,
